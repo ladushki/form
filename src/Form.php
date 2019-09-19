@@ -5,6 +5,8 @@ use Countable;
 use Exception;
 use ArrayAccess;
 use BadMethodCallException;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Laraplus\Form\Fields\Open;
 use Laraplus\Form\Fields\Close;
 use Laraplus\Form\Fields\Base\Element;
@@ -288,9 +290,9 @@ class Form extends Elements implements ArrayAccess, Countable
     {
         $this->enforceOpenForm($type);
 
-        $class = $isMacro ? static::$macros[$type] : 'Laraplus\\Form\\Fields\\' . studly_case($type);
+        $class = $isMacro ? static::$macros[$type] : 'Laraplus\\Form\\Fields\\' . Str::studly($type);
 
-        $element = new $class($name, $this->open, $this->presenter, $this->dataStore, $this->config, array_get($this->rules, $name));
+        $element = new $class($name, $this->open, $this->presenter, $this->dataStore, $this->config, Arr::get($this->rules, $name));
 
         if($this->ajaxValidation) {
             $element->groupAttr('data-ajax-validate-group', $name);
